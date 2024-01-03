@@ -59,19 +59,22 @@ def main():
     grid.populate_grid()
     grid.generate_border()
     grid.generate_obstacles()
+    pos = pygame.mouse.get_pos()
+
 
     # main loop --------------------------------------------------------------------------------------------------------
     while running:
 
-        UI.update_screen(grid)
+
+        UI.update_screen(grid, pos)
+        pos = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            pos = pygame.mouse.get_pos()
 
-            UI.update_buttons(pos)
+
 
             # TODO if click is outside of grid dont crash
             if pygame.mouse.get_pressed()[0]:  # LEFT

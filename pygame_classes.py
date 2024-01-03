@@ -31,16 +31,16 @@ class Button:
         return idle_img, hover_img, pressed_img
 
 
-    def draw(self):
+    def draw(self, style):
 
-        if self.is_pressed:
+        if style == 'pressed':
             self.win.blit(self.pressed_img, self.rect)
-        elif self.is_hovered:
+        elif style == "hover":
             self.win.blit(self.hover_img, self.rect)
-        else:
+        elif style == 'idle':
             self.win.blit(self.idle_img, self.rect)
 
     def check_hover(self, pos):
-        self.is_hovered = self.rect.collidepoint(pos)
+        return self.rect.collidepoint(pos)
 
 

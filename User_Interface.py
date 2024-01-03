@@ -23,22 +23,19 @@ class User_Interface:
         self.rows = rows
         self.buttons = []
 
-    def update_screen(self, grid):
+    def update_screen(self, grid, pos=None):
 
         self.win.fill(BLACK)
         grid.draw_nodes()
-        self.draw_buttons()
+        self.draw_buttons(pos)
+        self.draw_menu_border()
         # optional: draw grid lines here
         pygame.display.update()
 
     def create_buttons(self):
         pass
 
-    def update_buttons(self, pos):
-        for button in self.buttons:
-            button.check_hover(pos)
-
-    def draw_buttons(self):
+    def draw_buttons(self, pos):
         # TODO draw buttons using image successfully
         # TODO create button class
         # TODO methods to know when clicked and to change when clicked/hovered over
@@ -53,15 +50,15 @@ class User_Interface:
 
         self.buttons.append(b1)
 
-        b1.draw()
+        if pos:
+            for button in self.buttons:
+                if button.check_hover(pos):
+                    b1.draw('hover')
+                else:
+                    b1.draw('idle')
 
 
-
-        # pygame.draw.rect(self.win, RED, (self.grid_width + 40, 120, self.menu_width - 100, 40))
-        # pygame.draw.rect(self.win, RED, (self.grid_width + 40, 190, self.menu_width - 100, 40))
-
-        # button_image1 = pygame.transform.scale(rm_button, (button1.width, button1.height))
-        # pygame.draw.rect(win, button_image1)
+    def draw_menu_border(self):
 
         # TOP BORDER
         pygame.draw.rect(self.win, GREY, (
