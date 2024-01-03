@@ -1,4 +1,6 @@
 import pygame
+from pygame_classes import Button
+
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -19,6 +21,7 @@ class User_Interface:
         self.grid_width = grid_width
         self.menu_width = menu_width
         self.rows = rows
+        self.buttons = []
 
     def update_screen(self, grid):
 
@@ -31,6 +34,10 @@ class User_Interface:
     def create_buttons(self):
         pass
 
+    def update_buttons(self, pos):
+        for button in self.buttons:
+            button.check_hover(pos)
+
     def draw_buttons(self):
         # TODO draw buttons using image successfully
         # TODO create button class
@@ -39,8 +46,19 @@ class User_Interface:
         # b1_rect = pygame.Rect(grid_width + 40, 50, GRID_WIDTH - 100, 40)
         # b1_img = pygame.image.load('button_random-mouse-algorithm.png')
 
-        pygame.draw.rect(self.win, RED, (self.grid_width + 40, 120, self.menu_width - 100, 40))
-        pygame.draw.rect(self.win, RED, (self.grid_width + 40, 190, self.menu_width - 100, 40))
+        b1 = Button(self.win, self.grid_width + 20, 120, 160, 50,
+                    'mouse_idle.png',
+                    'mouse_hover.png',
+                    'mouse_pressed.png')
+
+        self.buttons.append(b1)
+
+        b1.draw()
+
+
+
+        # pygame.draw.rect(self.win, RED, (self.grid_width + 40, 120, self.menu_width - 100, 40))
+        # pygame.draw.rect(self.win, RED, (self.grid_width + 40, 190, self.menu_width - 100, 40))
 
         # button_image1 = pygame.transform.scale(rm_button, (button1.width, button1.height))
         # pygame.draw.rect(win, button_image1)
@@ -66,4 +84,4 @@ class User_Interface:
             self.grid_width / self.rows,
             self.grid_width))
 
-    # A* -------------------------------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------------------------------
