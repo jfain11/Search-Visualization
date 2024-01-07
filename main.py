@@ -1,7 +1,7 @@
 
 import pygame
 from queue import PriorityQueue
-
+import pygame_gui
 from User_Interface import User_Interface
 from Grid import Grid
 
@@ -17,7 +17,6 @@ GREY = (125, 126, 1117)
 TURQUOISE = (64, 224, 208)
 
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 def get_clicked_pos(pos, rows, width):
@@ -28,7 +27,6 @@ def get_clicked_pos(pos, rows, width):
     col = x // gap
 
     return row, col
-
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -43,14 +41,18 @@ def main():
 
     # TODO fix issue with rows > 50 not correctly generating borders
 
-    GRID_WIDTH = 800
-    MENU_WIDTH = 400
-    HEIGHT = 800
+    pygame.init()
+
+    GRID_WIDTH = 1200
+    MENU_WIDTH = 800
+    HEIGHT = 1200
     ROWS = 50
 
     win = pygame.display.set_mode((GRID_WIDTH + MENU_WIDTH, HEIGHT), pygame.NOFRAME)
-    UI = User_Interface(win, ROWS, GRID_WIDTH, MENU_WIDTH)
+    manager = pygame_gui.UIManager((GRID_WIDTH + MENU_WIDTH, HEIGHT))
+    UI = User_Interface(win, manager, ROWS, GRID_WIDTH, MENU_WIDTH)
     grid = Grid(GRID_WIDTH, ROWS, win, UI)
+
 
     running = True
     start = None
@@ -61,10 +63,18 @@ def main():
     grid.generate_obstacles()
     pos = pygame.mouse.get_pos()
 
+    button_rect = pygame.Rect((850, 100), (200, 50))
+    button = pygame_gui.elements.UIButton(relative_rect=button_rect, text='Click me!', manager=manager)
+
+    # Create another button
+    another_button_rect = pygame.Rect((850, 200), (200, 50))
+    another_button = pygame_gui.elements.UIButton(relative_rect=another_button_rect, text='Another Button',
+                                                  manager=manager)
+
 
     # main loop --------------------------------------------------------------------------------------------------------
-    while running:
 
+    while running:
 
         UI.update_screen(grid, pos)
         pos = pygame.mouse.get_pos()
@@ -74,6 +84,10 @@ def main():
                 running = False
 
 
+            if event.type == pygame.USEREVENT:
+                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == button:
+                        grid.generate_obstacles()
 
 
             # TODO if click is outside of grid dont crash
@@ -88,18 +102,19 @@ def main():
                     end = node
                     end.color = PURPLE
 
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_SPACE:
-            #         grid.generate_obstacles()
-
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and start and end:
-                    for row in grid.grid:
-                        for node in row:
-                            node.update_neighbors(grid.grid)
+                if event.key == pygame.K_SPACE:
+                    grid.generate_obstacles()
 
-                    #grid.astar_algorithm(start, end)
-                    grid.random_mouse_algorithm(start, end, YELLOW)
+            # if event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_SPACE and start and end:
+            #         for row in grid.grid:
+            #             for node in row:
+            #                 node.update_neighbors(grid.grid)
+            #
+            #         #grid.astar_algorithm(start, end)
+            #         #grid.random_mouse_algorithm(start, end, YELLOW)
+
 
     pygame.quit()
 

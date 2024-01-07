@@ -12,9 +12,10 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 PURPLE = (128, 0, 128)
-ORANGE = (255, 165 ,0)
+ORANGE = (255, 165, 0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
+
 
 class Grid:
 
@@ -25,7 +26,6 @@ class Grid:
         self.grid = []
         self.win = win
         self.UI = UI
-
 
     def populate_grid(self):
 
@@ -74,8 +74,6 @@ class Grid:
             time.sleep(0.01)
             self.UI.update_screen(self)
 
-
-
     # ----------------------------------------------------------------------------------------------------------------------
 
     def draw_nodes(self):
@@ -85,7 +83,7 @@ class Grid:
                 node.draw(self.win)
 
         # TODO get this to work
-        #draw_buttons(win)
+        # draw_buttons(win)
 
     # ----------------------------------------------------------------------------------------------------------------------
 
@@ -99,7 +97,7 @@ class Grid:
                     node.color = GREY
 
         # TODO may be an issue
-        #update_screen(self.win, self)
+        # update_screen(self.win, self)
 
     # random mouse ---------------------------------------------------------------------------------------------------------
 
@@ -133,7 +131,6 @@ class Grid:
             self.UI.update_screen(self)
 
     # ------------------------------------------------------------------------------------------------------------------
-
 
     def calculate_distance(self, p1, p2):
         x1, y1 = p1

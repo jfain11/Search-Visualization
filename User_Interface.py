@@ -15,9 +15,10 @@ TURQUOISE = (64, 224, 208)
 
 class User_Interface:
 
-    def __init__(self, win, rows, grid_width, menu_width):
+    def __init__(self, win, manager, rows, grid_width, menu_width):
 
         self.win = win
+        self.manager = manager
         self.grid_width = grid_width
         self.menu_width = menu_width
         self.rows = rows
@@ -27,35 +28,13 @@ class User_Interface:
 
         self.win.fill(BLACK)
         grid.draw_nodes()
-        self.draw_buttons(pos)
         self.draw_menu_border()
         # optional: draw grid lines here
+
+        self.manager.update(30)
+        self.manager.draw_ui(self.win)
+
         pygame.display.update()
-
-    def create_buttons(self):
-        pass
-
-    def draw_buttons(self, pos):
-        # TODO draw buttons using image successfully
-        # TODO create button class
-        # TODO methods to know when clicked and to change when clicked/hovered over
-
-        # b1_rect = pygame.Rect(grid_width + 40, 50, GRID_WIDTH - 100, 40)
-        # b1_img = pygame.image.load('button_random-mouse-algorithm.png')
-
-        b1 = Button(self.win, self.grid_width + 20, 120, 160, 50,
-                    'mouse_idle.png',
-                    'mouse_hover.png',
-                    'mouse_pressed.png')
-
-        self.buttons.append(b1)
-
-        if pos:
-            for button in self.buttons:
-                if button.check_hover(pos):
-                    b1.draw('hover')
-                else:
-                    b1.draw('idle')
 
 
     def draw_menu_border(self):
@@ -71,6 +50,13 @@ class User_Interface:
         pygame.draw.rect(self.win, GREY, (
             self.grid_width,
             self.grid_width - (self.grid_width / self.rows),
+            self.menu_width,
+            self.grid_width / self.rows))
+
+        # MIDDLE BORDER
+        pygame.draw.rect(self.win, GREY, (
+            self.grid_width,
+            self.grid_width / 2 - 10,
             self.menu_width,
             self.grid_width / self.rows))
 
