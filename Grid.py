@@ -1,3 +1,4 @@
+import heapq
 import random
 import time
 from queue import PriorityQueue
@@ -13,7 +14,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 PURPLE = (128, 0, 128)
 ORANGE = (255, 165, 0)
-GREY = (128, 128, 128)
+GREY = (125, 126, 117)
 TURQUOISE = (64, 224, 208)
 
 
@@ -56,10 +57,6 @@ class Grid:
 
                 node = self.grid[column][row]
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-
                 if row == 0 or row == self.rows - 1 or column == 0 or column == self.rows - 1:
                     pass
 
@@ -70,6 +67,48 @@ class Grid:
 
                     elif random.random() < 0.30:
                         node.color = BLACK
+
+            time.sleep(0.01)
+            self.UI.update_screen(self)
+
+    def dijkstra_maze_generation(self, start):
+        # Initialize distances and the priority queue
+        distances = {node: float('infinity') for row in self.grid for node in row}
+        distances[start] = 0
+        pq = [(0, start)]
+
+        while pq:
+            current_distance, current_node = heapq.heappop(pq)
+
+            for neighbor in current_node.neighbors:
+                new_distance = distances[current_node] + 1
+
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    heapq.heappush(pq, (new_distance, neighbor))
+
+        # Mark nodes along the path as walls
+        for row in self.grid:
+            for node in row:
+                if node.color == WHITE and node != start and distances[node] != float('infinity'):
+                    node.color = BLACK
+                    self.UI.update_screen(self)
+
+    # Usage:
+    # Call dijkstra_maze_generation with the starting node to generate a maze using Dijkstra's algorithm.
+    # Example: grid.dijkstra_maze_generation(grid.grid[1][1])
+
+    def clear_colors(self):
+
+        for row in range(self.rows):
+            for column in range(self.rows):
+                node = self.grid[column][row]
+
+                if row == 0 or row == self.rows - 1 or column == 0 or column == self.rows - 1:
+                    pass
+
+                elif node.color != BLACK and node.color != WHITE:
+                    node.color = WHITE
 
             time.sleep(0.01)
             self.UI.update_screen(self)
@@ -108,7 +147,7 @@ class Grid:
 
         mouse = start
         came_from = {}
-
+        counter = 0
         while mouse != end:
 
             mouse.color = color
@@ -128,7 +167,10 @@ class Grid:
             else:
                 mouse = came_from[mouse]
 
-            self.UI.update_screen(self)
+            counter += 1
+            if counter == 5:
+                counter = 0
+                self.UI.update_screen(self)
 
     # ------------------------------------------------------------------------------------------------------------------
 
@@ -136,6 +178,11 @@ class Grid:
         x1, y1 = p1
         x2, y2 = p2
         return abs(x1 - x2) + abs(y1 - y2)
+
+    def update_grid_neighbors(self):
+        for row in self.grid:
+            for node in row:
+                node.update_neighbors(self.grid)
 
     def reconstruct_path(self, came_from, current):
         while current in came_from:

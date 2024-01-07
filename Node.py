@@ -10,7 +10,7 @@ class Node:
         self.x = row * width
         self.y = col * width
         self.BLACK = (0, 0, 0)
-        self.GREY = (128, 128, 128)
+        self.GREY = (125, 126, 117)
         self.color = self.BLACK
         self.neighbors = []
         self.width = width
